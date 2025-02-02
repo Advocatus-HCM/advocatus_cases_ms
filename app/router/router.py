@@ -13,7 +13,6 @@ def case_serializer(case) -> dict:
             "_id": str(case["_id"]),  # Convert ObjectId to string
             "name": case["name"],
             "description": case["description"],
-            "start_date": case["start_date"],
             "type": case["type"],
             "subtype": case["subtype"],
             "status": case["status"],
@@ -28,6 +27,13 @@ def case_serializer(case) -> dict:
 @router.post("/", response_model=dict)
 async def create_case(case: dict):
     print("Received Data:", case)  # Debugging line
+    
+    # Set default dates if not provided
+    if "created_at" not in case:
+        case["created_at"] = datetime.utcnow()
+    if "updated_at" not in case:
+        case["updated_at"] = datetime.utcnow()
+    
     result = await cases_collection.insert_one(case)
     return {"id": str(result.inserted_id), "message": "Case creado exitosamente"}
 

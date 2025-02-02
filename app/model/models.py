@@ -10,7 +10,6 @@ class Personnel(BaseModel):
 class Case(BaseModel):
     name: str
     description: str
-    start_date: datetime
     type: str
     subtype: str
     status: str
