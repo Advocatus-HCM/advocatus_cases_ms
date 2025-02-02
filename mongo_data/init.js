@@ -1,5 +1,5 @@
 // init.js - MongoDB Initialization Script
-db = db.getSiblingDB('advocatus_cases_db');
+db = db.getSiblingDB('cases_db');
 db.createCollection("cases");
 db.createUser({
   user: "admin",
