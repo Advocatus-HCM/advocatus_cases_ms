@@ -29,6 +29,8 @@ async def create_case(case: dict):
     print("Received Data:", case)  # Debugging line
     
     # Set default dates if not provided
+    if "archived" not in case:
+        case["archived"] = False
     if "created_at" not in case:
         case["created_at"] = datetime.utcnow()
     if "updated_at" not in case:
@@ -102,6 +104,19 @@ async def archive_case(case_id: str):
     # If the case is found and updated, return a success message
     if archived_case:
         return {"message": "¡Caso archivado extosamente!", "case": case_serializer(archived_case)}
+    
+    # If no case is found, raise 404 error
+    raise HTTPException(status_code=404, detail="Caso no encontrado")
+
+# 🔹 Permanently Delete a Case (DELETE /cases/permanent/{case_id})
+@router.delete("/permanent/{case_id}", response_model=dict)
+async def delete_case(case_id: str):
+    # Find and delete the case by its ID
+    delete_result = await cases_collection.delete_one({"_id": ObjectId(case_id)})
+
+    # If the case is deleted, return a success message
+    if delete_result.deleted_count == 1:
+        return {"message": "¡Caso eliminado permanentemente!"}
     
     # If no case is found, raise 404 error
     raise HTTPException(status_code=404, detail="Caso no encontrado")

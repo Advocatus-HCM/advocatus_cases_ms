@@ -13,7 +13,7 @@ class Case(BaseModel):
     type: str
     subtype: str
     status: str
-    archived: bool = False
+    archived: bool
     involved_personnel: List[Personnel]
     created_at: datetime
     updates_at: datetime
